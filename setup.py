@@ -6,19 +6,16 @@ version = '0.1'
 setup(name='collective.chimpdrill',
       version=version,
       description="Mailchimp & Mandrill Integration",
-      long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from
-      # http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      long_description=open("README.md").read(),
       classifiers=[
         "Framework :: Plone",
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='',
-      author='',
-      author_email='',
-      url='http://svn.plone.org/svn/collective/',
+      author='Jason Lantz',
+      author_email='jasontlantz@gmail.com',
+      url='http://github.com/collective/collective.chimpdrill',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['collective'],
@@ -41,10 +38,5 @@ setup(name='collective.chimpdrill',
       [z3c.autoinclude.plugin]
       target = plone
       """,
-      # The next two lines may be deleted after you no longer need
-      # addcontent support from paster and before you distribute
-      # your package.
-      setup_requires=["PasteScript"],
-      paster_plugins = ["ZopeSkel"],
 
       )

@@ -78,9 +78,9 @@ class DummyMailsnake(object):
 class DummyMailchimpConnection(object):
     def templates(self):
         return {'user': [
-            {'id': 1, 'name': 'Test Template 1'},
-            {'id': 2, 'name': 'Test Template 2'},
-            {'id': 3, 'name': 'Test Template 3'},
+            {'id': "1", 'name': 'Test Template 1'},
+            {'id': "2", 'name': 'Test Template 2'},
+            {'id': "3", 'name': 'Test Template 3'},
         ]}
 
     def templateInfo(self, tid):

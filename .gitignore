@@ -17,6 +17,8 @@ develop-eggs
 .installed.cfg
 lib
 lib64
+include
+src
 
 # Installer logs
 pip-log.txt
@@ -33,3 +35,9 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Vim swap files
+.*.swp
+
+# Appears to be OS X virtualenv artifact?
+.Python
