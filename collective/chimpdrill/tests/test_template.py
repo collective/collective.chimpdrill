@@ -62,8 +62,8 @@ class TemplateFunctionalTest(unittest.TestCase):
         self.assertTrue('Description Test 1' in browser.contents)
 
         template = portal.unrestrictedTraverse('test-repository/test-template-1')
-        self.assertEqual(template.mandrill_template, 'mailchimp-1')
-        self.assertEqual(template.mandrill_template_info['name'], 'mailchimp-1')
+        self.assertEqual(template.mandrill_template, 'chimpdrill-1')
+        self.assertEqual(template.mandrill_template_info['name'], 'chimpdrill-1')
         self.assertEqual(template.mailchimp_template_info['name'], 'Test Template 1')
         
     def test_create_new_template(self):
@@ -87,8 +87,8 @@ class TemplateFunctionalTest(unittest.TestCase):
         self.assertTrue('Test Upload Description' in browser.contents)
 
         template = portal.unrestrictedTraverse('test-repository/test-template-3')
-        self.assertEqual(template.mandrill_template, 'mailchimp-3')
-        self.assertEqual(template.mandrill_template_info['name'], 'mailchimp-3')
+        self.assertEqual(template.mandrill_template, 'chimpdrill-3')
+        self.assertEqual(template.mandrill_template_info['name'], 'chimpdrill-3')
         self.assertEqual(template.mailchimp_template_info['name'], 'Test Template 3')
 
         browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))

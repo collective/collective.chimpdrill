@@ -177,8 +177,8 @@ class Template(dexterity.Item):
         if not hasattr(self, '_mailchimp_template_name'):
             templates = self.c_mailchimp.templates()
             template_name = None
-            for template in templates:
-                if template.get('tid') == self.mailchimp_template:
+            for template in templates.get('user', []):
+                if template.get('id') == self.mailchimp_template:
                     template_name = template.get('name')
                     break
             self._mailchimp_template_name = template_name
