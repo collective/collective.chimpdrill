@@ -12,6 +12,7 @@ from zope.app.container.interfaces import IObjectAddedEvent
 from plone.directives import dexterity, form
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.schema.interfaces import IVocabularyFactory
+from mailsnake.exceptions import HTTPRequestException
 from collective.chimpdrill.utils import IMailsnakeConnection
 from collective.chimpdrill.utils import get_settings
 
@@ -174,7 +175,7 @@ class Template(dexterity.Item):
         if not self.mailchimp_template:
             return
 
-        if not hasattr(self, '_mailchimp_template_name'):
+        if not hasattr(self, '_mailchimp_template_name') or not self._mailchimp_template_name:
             templates = self.c_mailchimp.templates()
             template_name = None
             for template in templates.get('user', []):
@@ -189,27 +190,40 @@ class Template(dexterity.Item):
         if not self.mailchimp_template:
             return
 
-        if not hasattr(self, '_mailchimp_template_info'):
+        if not hasattr(self, '_mailchimp_template_info') or not self._mailchimp_template_info:
             self._mailchimp_template_info = self.c_mailchimp.templateInfo(tid = self.mailchimp_template)
         return self._mailchimp_template_info
 
     @property
     def mandrill_template_info(self):
+        settings = get_settings()
+
         if not self.mandrill_template:
-            return
+            if self.mailchimp_template:
+                md_name = '%s-%s' % (settings.mandrill_template_prefix, self.mailchimp_template)
+                # See if a template already exists in Mandrill
+                try:
+                    info = self.c_mandrill.templates.info(name=md_name)
+                    self._mandrill_template = md_name
+                    self._mandrill_template_info = info
+                except HTTPRequestException:
+                    return
         
-        if not hasattr(self, '_mandrill_template_info'):
+        if not hasattr(self, '_mandrill_template_info') or not self._mandrill_template_info:
             self._mandrill_template_info = self.c_mandrill.templates.info(name=self.mandrill_template)
         return self._mandrill_template_info
 
     @property
     def updated_since_sync(self):
-        pass
+        # FIXME: Not sure how to accomplish this through the API
+        return False
 
     def sync_to_mandrill(self):
         mc_info = self.mailchimp_template_info
 
-        md_name = 'chimpdrill-%s' % self.mailchimp_template
+        settings = get_settings()
+
+        md_name = '%s-%s' % (settings.mandrill_template_prefix, self.mailchimp_template)
         md_code = '%s' % self.process_mailchimp_source(mc_info['source'])
 
         info = {
@@ -218,7 +232,7 @@ class Template(dexterity.Item):
             'publish': True,
         }
 
-        if self.mandrill_template:
+        if self.mandrill_template_info:
             resp = self.c_mandrill.templates.update(**info)
         else:
             resp = self.c_mandrill.templates.add(**info)

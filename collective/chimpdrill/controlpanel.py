@@ -29,6 +29,12 @@ class IChimpdrillSettings(Interface):
         description=u"This can be located in the account settings of your Mandrill acccount",
     )
     
+    mandrill_template_prefix = schema.TextLine(
+        title=u"Mandrill Template Prefix",
+        description=u"The prefix used when constructing the template name in Mandrill.  This is useful if you want to have different multiple sites sharing the same Mailchimp and Mandrill accounts each with their own Mandrill templates synced from common Mailchimp templates.",
+        default=u"chimpdrill",
+    )
+    
 
 class ChimpdrillSettingsEditForm(controlpanel.RegistryEditForm):
     schema = IChimpdrillSettings
