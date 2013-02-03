@@ -10,10 +10,6 @@ from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
 from collective.chimpdrill.controlpanel import IChimpdrillSettings
 
-def get_settings():
-    registry = getUtility(IRegistry)
-    return registry.forInterface(IChimpdrillSettings, False)
-
 class IMailsnakeConnection(Interface):
     def get_mailchimp():
         """ Returns a Mailsnake connection instance to the Mailchimp API """
@@ -39,5 +35,9 @@ class MailsnakeConnection(object):
 
     def get_mandrill(self):
         return self.get_connection('mandrill')
+
+def get_settings():
+    registry = getUtility(IRegistry)
+    return registry.forInterface(IChimpdrillSettings, False)
 
 grok.global_utility(MailsnakeConnection, provides=IMailsnakeConnection)

@@ -10,6 +10,7 @@ from z3c.form import button
 from zope.app.content.interfaces import IContentType
 from zope.app.container.interfaces import IObjectAddedEvent
 from plone.directives import dexterity, form
+from Products.statusmessages.interfaces import IStatusMessage
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.schema.interfaces import IVocabularyFactory
 from mailsnake.exceptions import HTTPRequestException
@@ -280,6 +281,10 @@ class TemplateView(grok.View):
     grok.name('view')
     grok.template('view')
 
+    def update(self):
+        from zope.schema.interfaces import IVocabularyFactory
+        import pdb; pdb.set_trace()
+
 class TemplatePreviewView(grok.View):
     grok.context(ITemplate)
     grok.require('zope2.View')
@@ -327,4 +332,11 @@ class TemplateSendView(form.SchemaForm):
 
         self.context.send(data['send_to'], merge_vars, blocks)
 
+        messages = IStatusMessage(self.request)
+        messages.add("Email was sent to %s." % (data['send_to']))
+
         return self.request.response.redirect(self.context.absolute_url())
+
+class TemplateSyncView(form.SchemaForm):
+    grok.context(ITemplate)
+    grok.require('cmf.ModifyPortalContent')
