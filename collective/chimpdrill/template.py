@@ -281,10 +281,6 @@ class TemplateView(grok.View):
     grok.name('view')
     grok.template('view')
 
-    def update(self):
-        from zope.schema.interfaces import IVocabularyFactory
-        import pdb; pdb.set_trace()
-
 class TemplatePreviewView(grok.View):
     grok.context(ITemplate)
     grok.require('zope2.View')
