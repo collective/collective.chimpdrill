@@ -255,6 +255,14 @@ class Template(dexterity.Item):
         template_id = self.c_mailchimp.templateAdd(name=name, html=html)
         self.mailchimp_template = template_id
 
+    def render(self, merge_vars, blocks):
+        rendered = self.context.c_mandrill.templates.render(**{
+            'template_name': self.context.mandrill_template,
+            'merge_vars': self.merge_vars,
+            'template_content': self.blocks
+        })
+        return rendered.get('html')
+
     def send(self, email, merge_vars, blocks):
         return self.c_mandrill.messages.send_template(**{
             'template_name': self.mandrill_template,
@@ -293,7 +301,7 @@ class TemplatePreviewView(grok.View):
 
 class TemplateSendView(form.SchemaForm):
     grok.context(ITemplate)
-    grok.require('zope2.View')
+    grok.require('cmf.View')
     grok.name('send_email')
     
     ignoreContext = True
