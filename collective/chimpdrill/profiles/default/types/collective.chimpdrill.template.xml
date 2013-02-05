@@ -4,7 +4,7 @@
    i18n:domain="collective.chimpdrill" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- Basic metadata -->
-  <property name="title" i18n:translate="">Template</property>
+  <property name="title" i18n:translate="">Email Template</property>
   <property name="description"
     i18n:translate="">A Mailchimp template linked to a Mandrill template</property>
   <property name="icon_expr">string:${portal_url}/folder_icon.png</property>

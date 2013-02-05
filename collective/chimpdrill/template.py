@@ -220,6 +220,9 @@ class Template(dexterity.Item):
         return False
 
     def sync_to_mandrill(self):
+        # Clear cached info
+        if hasattr(self, '_mailchimp_template_info'):
+            del(self._mailchimp_template_info)
         mc_info = self.mailchimp_template_info
 
         settings = get_settings()
@@ -256,10 +259,10 @@ class Template(dexterity.Item):
         self.mailchimp_template = template_id
 
     def render(self, merge_vars, blocks):
-        rendered = self.context.c_mandrill.templates.render(**{
-            'template_name': self.context.mandrill_template,
-            'merge_vars': self.merge_vars,
-            'template_content': self.blocks
+        rendered = self.c_mandrill.templates.render(**{
+            'template_name': self.mandrill_template,
+            'merge_vars': merge_vars,
+            'template_content': blocks,
         })
         return rendered.get('html')
 
@@ -344,3 +347,12 @@ class TemplateSendView(form.SchemaForm):
 class TemplateSyncView(form.SchemaForm):
     grok.context(ITemplate)
     grok.require('cmf.ModifyPortalContent')
+    grok.name('sync_to_mandrill')
+
+    def render(self):
+        self.context.sync_to_mandrill()
+
+        messages = IStatusMessage(self.request)
+        messages.add("Template was updated in Mandrill using the latest template code from Mailchimp")
+
+          
