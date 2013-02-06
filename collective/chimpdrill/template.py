@@ -258,6 +258,12 @@ class Template(dexterity.Item):
         template_id = self.c_mailchimp.templateAdd(name=name, html=html)
         self.mailchimp_template = template_id
 
+    def merge_vars_to_string(self, merge_vars, value):
+        value = unicode(value)
+        for merge_var in merge_vars:
+            value = value.replace('*|%s|*' % merge_var['name'], unicode(merge_var['content']))
+        return value
+
     def render(self, merge_vars, blocks):
         rendered = self.c_mandrill.templates.render(**{
             'template_name': self.mandrill_template,
@@ -271,9 +277,9 @@ class Template(dexterity.Item):
             'template_name': self.mandrill_template,
             'template_content': blocks,
             'message': {
-                'subject': self.email_subject,
-                'from_email': self.from_email,
-                'from_name': self.from_name,
+                'subject': self.merge_vars_to_string(merge_vars, self.email_subject),
+                'from_email': self.merge_vars_to_string(merge_vars, self.from_email),
+                'from_name': self.merge_vars_to_string(merge_vars, self.from_name),
                 'to': [
                     {'email': email},
                 ],
