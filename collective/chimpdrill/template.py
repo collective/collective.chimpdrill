@@ -310,7 +310,7 @@ class TemplatePreviewView(grok.View):
 
 class TemplateSendView(form.SchemaForm):
     grok.context(ITemplate)
-    grok.require('zope2.View')
+    grok.require('cmf.ModifyPortalContent')
     grok.name('send_email')
     
     ignoreContext = True
